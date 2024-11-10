@@ -10,7 +10,6 @@ const __dirname = path.dirname(__filename);
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || 'DISCORD_BOT_TOKEN';
 const CLIENT_ID = process.env.CLIENT_ID || 'CLIENT_ID';
-const GUILD_ID = process.env.GUILD_ID || 'GUILD_ID';
 
 const deployCommands = async () => {
   const commands = [];
@@ -48,10 +47,9 @@ const deployCommands = async () => {
     );
 
     // The put method is used to fully refresh all commands in the guild with the current set
-    const data = await rest.put(
-      Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
-      { body: commands }
-    );
+    const data = await rest.put(Routes.applicationCommands(CLIENT_ID), {
+      body: commands,
+    });
 
     console.log(
       `Successfully reloaded ${data.length} application (/) commands.`
