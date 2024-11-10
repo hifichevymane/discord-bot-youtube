@@ -38,6 +38,8 @@ const execute = async (interaction) => {
     const stream = ytdl(url, {
       quality: 'highestaudio',
       filter: 'audioonly',
+      liveBuffer: 2000,
+      highWaterMark: 1 << 25,
     });
     stream.on('error', (err) => {
       stream.destroy();
