@@ -53,7 +53,7 @@ const execute = async (interaction) => {
       connection.destroy(); // Leave the channel when playback ends
     });
 
-    await interaction.channel.send(`Now playing ${url}`);
+    await interaction.reply(`Now playing ${url}`);
   } catch (err) {
     console.error('Failed to stream youtube audio: ', err);
     await interaction.reply('Failed to stream youtube audio');
