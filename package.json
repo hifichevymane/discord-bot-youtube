@@ -1,0 +1,28 @@
+{
+  "name": "discord-bot-youtube",
+  "version": "1.0.0",
+  "description": "the discord bot written on js to play youtube videos in the voice channel",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/main.js",
+    "deploy-commands": "node src/deploy-commands.js",
+    "start": "env NODE_ENV=development pm2 start src/main.js --name=discord-bot --watch",
+    "stop": "pm2 stop discord-bot",
+    "logs": "pm2 logs discord-bot --lines=100"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/voice": "^0.17.0",
+    "@distube/ytdl-core": "^4.15.1",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "libsodium-wrappers": "^0.7.15"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
