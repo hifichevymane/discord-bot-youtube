@@ -1,9 +1,15 @@
 import { createAudioPlayer, AudioPlayerStatus } from '@discordjs/voice';
+import { getNextTrack } from './track-queue.js';
+import { createAudioResourceFromYouTubeURL } from './utils.js';
 
 const player = createAudioPlayer();
 
 player.on(AudioPlayerStatus.Idle, () => {
-  connection.destroy(); // Leave the channel when playback ends
+  const url = getNextTrack();
+  if (!url) return;
+
+  const resource = createAudioResourceFromYouTubeURL(url);
+  player.play(resource);
 });
 
 export default player;

@@ -1,7 +1,14 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { joinVoiceChannel, createAudioResource } from '@discordjs/voice';
+import {
+  joinVoiceChannel,
+  getVoiceConnection,
+  AudioPlayerStatus,
+} from '@discordjs/voice';
 import ytdl from '@distube/ytdl-core';
+
 import player from '../../audio-player.js';
+import { addTrackToQueue } from '../../track-queue.js';
+import { createAudioResourceFromYouTubeURL } from '../../utils.js';
 
 const data = new SlashCommandBuilder()
   .setName('play')
@@ -25,24 +32,27 @@ const execute = async (interaction) => {
   }
 
   try {
-    const connection = joinVoiceChannel({
-      channelId: voiceChannel.id,
-      guildId: voiceChannel.guild.id,
-      adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-    });
+    if (player.state.status === AudioPlayerStatus.Playing) {
+      addTrackToQueue(url);
+      await interaction.reply(`The track ${url} was added into a queue`);
+      return;
+    }
 
-    const stream = ytdl(url, {
-      quality: 'highestaudio',
-      filter: 'audioonly',
-      liveBuffer: 2000,
-      highWaterMark: 1 << 25,
-    });
-    stream.on('error', (err) => {
-      stream.destroy();
-      console.error('Streaming failed:', err);
-    });
+    const guildId = voiceChannel.guild.id;
+    let connection;
+    const existingConnection = getVoiceConnection(guildId);
 
-    const resource = createAudioResource(stream);
+    if (existingConnection) {
+      connection = existingConnection;
+    } else {
+      connection = joinVoiceChannel({
+        channelId: voiceChannel.id,
+        guildId: guildId,
+        adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+      });
+    }
+
+    const resource = createAudioResourceFromYouTubeURL(url);
     player.play(resource);
     connection.subscribe(player);
 
