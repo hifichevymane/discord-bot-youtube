@@ -8,13 +8,14 @@ const data = new SlashCommandBuilder()
 const execute = async (interaction) => {
   const voiceChannel = interaction.member.voice.channel;
   const connection = getVoiceConnection(voiceChannel.guild.id);
+
   if (!connection) {
     await interaction.reply('No voice connection was detected');
     return;
   }
 
   connection.destroy();
-  await interaction.reply('Audio streaming was destroyed');
+  await interaction.reply('The bot has been stopped');
 };
 
 export { data, execute };
