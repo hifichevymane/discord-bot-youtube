@@ -1,23 +1,22 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
-import { emptyTrackQueue } from '../../track-queue.js';
+import player from '../../audio-player.js';
 
 const data = new SlashCommandBuilder()
-  .setName('stop')
-  .setDescription('stop the audio and disconnects from the channel');
+  .setName('resume')
+  .setDescription('Resumes the current track if it was paused');
 
 const execute = async (interaction) => {
   const voiceChannel = interaction.member.voice.channel;
   const connection = getVoiceConnection(voiceChannel.guild.id);
 
   if (!connection) {
-    await interaction.reply('No voice connection was detected');
+    await interaction.reply('The bot is not playing!');
     return;
   }
 
-  connection.destroy();
-  emptyTrackQueue();
-  await interaction.reply('The bot has been stopped');
+  player.unpause();
+  await interaction.reply('The current track was resumed!');
 };
 
 export { data, execute };
