@@ -1,11 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
-import {
-  joinVoiceChannel,
-  createAudioPlayer,
-  createAudioResource,
-  AudioPlayerStatus,
-} from '@discordjs/voice';
+import { joinVoiceChannel, createAudioResource } from '@discordjs/voice';
 import ytdl from '@distube/ytdl-core';
+import player from '../../audio-player.js';
 
 const data = new SlashCommandBuilder()
   .setName('play')
@@ -47,13 +43,8 @@ const execute = async (interaction) => {
     });
 
     const resource = createAudioResource(stream);
-    const player = createAudioPlayer();
     player.play(resource);
     connection.subscribe(player);
-
-    player.on(AudioPlayerStatus.Idle, () => {
-      connection.destroy(); // Leave the channel when playback ends
-    });
 
     await interaction.reply(`Now playing ${url}`);
   } catch (err) {
