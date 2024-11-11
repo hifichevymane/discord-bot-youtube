@@ -16,7 +16,7 @@ const execute = async (interaction) => {
     .join('\n');
 
   const listString = `
-    Current track list:
+    Current queue:
     ${listedTrackQueueItems}
   `;
   await interaction.reply(listString);
