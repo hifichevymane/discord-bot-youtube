@@ -34,11 +34,12 @@ const main = async () => {
       for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
         const command = await import(filePath);
+        const { data, execute } = command.default;
         // Set a new item in the Collection with the key as the command name and the value as the exported module
-        if ('data' in command && 'execute' in command) {
-          client.commands.set(command.data.name, command);
+        if (data && execute) {
+          client.commands.set(data.name, command.default);
         } else {
-          console.log(
+          console.warn(
             `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
           );
         }

@@ -63,4 +63,4 @@ const execute = async (interaction) => {
   }
 };
 
-export { data, execute };
+export default { data, execute };
