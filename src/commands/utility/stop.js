@@ -20,4 +20,4 @@ const execute = async (interaction) => {
   await interaction.reply('The bot has been stopped');
 };
 
-export { data, execute };
+export default { data, execute };

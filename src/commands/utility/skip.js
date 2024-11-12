@@ -17,4 +17,4 @@ const execute = async (interaction) => {
   await interaction.reply('The current video was skipped!');
 };
 
-export { data, execute };
+export default { data, execute };

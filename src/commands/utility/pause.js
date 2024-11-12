@@ -19,4 +19,4 @@ const execute = async (interaction) => {
   await interaction.reply('The current track was paused');
 };
 
-export { data, execute };
+export default { data, execute };

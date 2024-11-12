@@ -22,4 +22,4 @@ const execute = async (interaction) => {
   await interaction.reply(listString);
 };
 
-export { data, execute };
+export default { data, execute };
