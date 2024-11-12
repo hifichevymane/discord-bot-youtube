@@ -4,13 +4,14 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import DiscordClient from './DiscordClient';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || 'token';
 
 const main = async () => {
-  const client = new Client({
+  const client = new DiscordClient({
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildVoiceStates,
@@ -20,7 +21,6 @@ const main = async () => {
     ],
   });
 
-  client.commands = new Collection();
   const foldersPath = path.join(__dirname, 'commands');
   const commandFolders = fs.readdirSync(foldersPath);
 
@@ -28,7 +28,7 @@ const main = async () => {
     const commandsPath = path.join(foldersPath, folder);
     const commandFiles = fs
       .readdirSync(commandsPath)
-      .filter((file) => file.endsWith('.js'));
+      .filter((file) => file.endsWith('.ts'));
 
     try {
       for (const file of commandFiles) {
@@ -52,7 +52,7 @@ const main = async () => {
   const eventsPath = path.join(__dirname, 'events');
   const eventFiles = fs
     .readdirSync(eventsPath)
-    .filter((file) => file.endsWith('.js'));
+    .filter((file) => file.endsWith('.ts'));
 
   try {
     for (const file of eventFiles) {
