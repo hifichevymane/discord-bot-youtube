@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
-import { emptyTrackQueue } from '../../track-queue.js';
+import { emptyVideoQueue } from '../../video-queue.js';
 
 const data = new SlashCommandBuilder()
   .setName('stop')
@@ -16,7 +16,7 @@ const execute = async (interaction) => {
   }
 
   connection.destroy();
-  emptyTrackQueue();
+  emptyVideoQueue();
   await interaction.reply('The bot has been stopped');
 };
 

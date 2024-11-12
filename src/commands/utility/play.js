@@ -7,7 +7,7 @@ import {
 import ytdl from '@distube/ytdl-core';
 
 import player from '../../audio-player.js';
-import { addTrackToQueue } from '../../track-queue.js';
+import { addVideoToQueue } from '../../video-queue.js';
 import { createAudioResourceFromYouTubeURL } from '../../utils.js';
 
 const data = new SlashCommandBuilder()
@@ -33,8 +33,8 @@ const execute = async (interaction) => {
 
   try {
     if (player.state.status === AudioPlayerStatus.Playing) {
-      addTrackToQueue(url);
-      await interaction.reply(`The track ${url} was added into a queue`);
+      addVideoToQueue(url);
+      await interaction.reply(`The video ${url} was added to a queue`);
       return;
     }
 
@@ -58,8 +58,8 @@ const execute = async (interaction) => {
 
     await interaction.reply(`Now playing ${url}`);
   } catch (err) {
-    console.error('Failed to stream youtube audio: ', err);
-    await interaction.reply('Failed to stream youtube audio');
+    console.error('Failed to stream youtube video: ', err);
+    await interaction.reply('Failed to stream youtube video');
   }
 };
 
