@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { GatewayIntentBits } from 'discord.js';
 import DiscordClient from './DiscordClient';
+import Command from './Command';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,16 +34,9 @@ const main = async () => {
     try {
       for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
-        const command = await import(filePath);
-        const { data, execute } = command.default;
+        const command: { default: Command } = await import(filePath);
         // Set a new item in the Collection with the key as the command name and the value as the exported module
-        if (data && execute) {
-          client.commands.set(data.name, command.default);
-        } else {
-          console.warn(
-            `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-          );
-        }
+        client.commands.set(command.default.data.name, command.default);
       }
     } catch (err) {
       console.error('Failed to load the file with a command: ', err);
