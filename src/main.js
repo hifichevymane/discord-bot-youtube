@@ -7,6 +7,7 @@ import { Client, Events, GatewayIntentBits, Collection } from 'discord.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || 'token';
 
 const main = async () => {
   const client = new Client({
@@ -28,9 +29,10 @@ const main = async () => {
     const commandFiles = fs
       .readdirSync(commandsPath)
       .filter((file) => file.endsWith('.js'));
-    for (const file of commandFiles) {
-      const filePath = path.join(commandsPath, file);
-      try {
+
+    try {
+      for (const file of commandFiles) {
+        const filePath = path.join(commandsPath, file);
         const command = await import(filePath);
         // Set a new item in the Collection with the key as the command name and the value as the exported module
         if ('data' in command && 'execute' in command) {
@@ -40,47 +42,32 @@ const main = async () => {
             `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
           );
         }
-      } catch (err) {
-        console.error('Failed to load the command file: ', err);
       }
+    } catch (err) {
+      console.error('Failed to load the file with a command: ', err);
     }
   }
 
-  client.once(Events.ClientReady, (readyClient) => {
-    console.log(`The client is ready! Logged in as ${readyClient.user.tag}`);
-  });
+  const eventsPath = path.join(__dirname, 'events');
+  const eventFiles = fs
+    .readdirSync(eventsPath)
+    .filter((file) => file.endsWith('.js'));
 
-  client.on(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = interaction.client.commands.get(interaction.commandName);
-
-    if (!command) {
-      console.error(
-        `No command matching ${interaction.commandName} was found.`
-      );
-      return;
-    }
-
-    try {
-      await command.execute(interaction);
-    } catch (error) {
-      console.error(error);
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({
-          content: 'There was an error while executing this command!',
-          ephemeral: true,
-        });
+  try {
+    for (const file of eventFiles) {
+      const filePath = path.join(eventsPath, file);
+      const event = await import(filePath);
+      const { name, once, execute } = event.default;
+      if (once) {
+        client.once(name, (...args) => execute(...args));
       } else {
-        await interaction.reply({
-          content: 'There was an error while executing this command!',
-          ephemeral: true,
-        });
+        client.on(name, (...args) => execute(...args));
       }
     }
-  });
+  } catch (err) {
+    console.error('Failed to load a file with bot event: ', err);
+  }
 
-  const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || 'token';
   client.login(DISCORD_BOT_TOKEN);
 };
 
