@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { getTrackQueue } from '../../track-queue.js';
+import { getVideoQueue } from '../../video-queue.js';
 
 const data = new SlashCommandBuilder()
-  .setName('list')
-  .setDescription('Shows the list of queued tracks');
+  .setName('queue')
+  .setDescription('Shows the list of queued videos');
 
 const execute = async (interaction) => {
-  const trackQueue = getTrackQueue();
+  const trackQueue = getVideoQueue();
   if (!trackQueue.length) {
     await interaction.reply('The queue is empty!');
     return;
