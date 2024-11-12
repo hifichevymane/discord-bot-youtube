@@ -6,9 +6,9 @@ import {
 } from '@discordjs/voice';
 import ytdl from '@distube/ytdl-core';
 
-import player from '../../audio-player.js';
-import { addVideoToQueue } from '../../video-queue.js';
-import { createAudioResourceFromYouTubeURL } from '../../utils.js';
+import player from '../../audio-player';
+import { addVideoToQueue } from '../../video-queue';
+import { createAudioResourceFromYouTubeURL } from '../../utils';
 
 const data = new SlashCommandBuilder()
   .setName('play')

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { AudioPlayerStatus } from '@discordjs/voice';
-import player from '../../audio-player.js';
+import player from '../../audio-player';
 
 const data = new SlashCommandBuilder()
   .setName('skip')

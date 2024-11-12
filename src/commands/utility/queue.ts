@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { getVideoQueue } from '../../video-queue.js';
+import { getVideoQueue } from '../../video-queue';
 
 const data = new SlashCommandBuilder()
   .setName('queue')

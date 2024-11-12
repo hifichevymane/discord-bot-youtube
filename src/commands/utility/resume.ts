@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
-import player from '../../audio-player.js';
+import player from '../../audio-player';
 
 const data = new SlashCommandBuilder()
   .setName('resume')

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
-import { emptyVideoQueue } from '../../video-queue.js';
+import { emptyVideoQueue } from '../../video-queue';
 
 const data = new SlashCommandBuilder()
   .setName('stop')

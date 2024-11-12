@@ -1,10 +1,10 @@
-let videoQueue = [];
+let videoQueue: string[] = [];
 
 export const getVideoQueue = () => {
   return videoQueue;
 };
 
-export const addVideoToQueue = (url) => {
+export const addVideoToQueue = (url: string) => {
   videoQueue.push(url);
 };
 
