@@ -34,9 +34,10 @@ const main = async () => {
     try {
       for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
-        const command: { default: Command } = await import(filePath);
+        const commandFile = await import(filePath);
+        const command: Command = new commandFile.default();
         // Set a new item in the Collection with the key as the command name and the value as the exported module
-        client.commands.set(command.default.data.name, command.default);
+        client.commands.set(command.data.name, command);
       }
     } catch (err) {
       console.error('Failed to load the file with a command: ', err);

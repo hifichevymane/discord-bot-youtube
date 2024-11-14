@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx src/main.ts",
+    "dev": "npx tsx watch src/main.ts",
     "deploy-commands": "npx tsx src/deploy-commands.ts",
     "start": "env NODE_ENV=development pm2 start src/main.js --name=discord-bot --watch",
     "stop": "pm2 stop discord-bot",
