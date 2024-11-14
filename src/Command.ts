@@ -7,11 +7,11 @@ import type {
 } from "discord.js"
 
 export default abstract class Command {
-  abstract readonly data:
+  public abstract readonly data:
     | SlashCommandBuilder
     | ContextMenuCommandBuilder
     | SlashCommandSubcommandsOnlyBuilder
     | SlashCommandOptionsOnlyBuilder
 
-  abstract execute(interaction: ChatInputCommandInteraction<"cached">): Promise<void>
+  public abstract execute(interaction: ChatInputCommandInteraction<"cached">): Promise<void>
 };

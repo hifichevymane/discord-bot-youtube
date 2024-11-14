@@ -6,23 +6,23 @@ import {
 } from '@discordjs/voice';
 import ytdl from '@distube/ytdl-core';
 
-import type { ChatInputCommandInteraction } from 'discord.js';
-import type { VoiceConnection } from '@discordjs/voice';
-
 import player from '../../audio-player';
 import { addVideoToQueue } from '../../video-queue';
 import { createAudioResourceFromYouTubeURL } from '../../utils';
 import Command from '../../Command';
 
+import type { ChatInputCommandInteraction } from 'discord.js';
+import type { VoiceConnection } from '@discordjs/voice';
+
 export default class PlayCommand extends Command {
-  readonly data = new SlashCommandBuilder()
+  public readonly data = new SlashCommandBuilder()
     .setName('play')
     .setDescription('Play Youtube video by URL')
     .addStringOption((option) =>
       option.setName('url').setDescription('youtube url link').setRequired(true)
     );
 
-  async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
+  public async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     const url = interaction.options.getString('url', true);
 
     const voiceChannel = interaction.member?.voice?.channel;
