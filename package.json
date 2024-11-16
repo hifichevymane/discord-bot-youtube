@@ -7,10 +7,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx tsx watch src/main.ts",
-    "deploy-commands": "npx tsx src/deploy-commands.ts",
-    "start": "pm2 start dist/main.js --name=discord-bot",
+    "deploy:commands": "npx tsx src/deploy-commands.ts",
+    "deploy:app": "pm2 start dist/main.js --name=discord-bot",
     "stop": "pm2 stop discord-bot",
-    "logs": "pm2 logs discord-bot --lines=100",
+    "logs:show": "pm2 logs discord-bot --lines=100",
+    "logs:clear": "pm2 flush discord-bot",
     "build": "tsc && tsc-alias"
   },
   "keywords": [],
