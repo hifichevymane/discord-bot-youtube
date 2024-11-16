@@ -3,46 +3,44 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import { GatewayIntentBits } from 'discord.js';
+
+import DiscordClient from './DiscordClient';
+import Command from './Command';
+import { IClientEvent } from './ClientEvent';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || 'token';
 
 const main = async () => {
-  const client = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildVoiceStates,
-      GatewayIntentBits.MessageContent,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.GuildMembers,
-    ],
-  });
+  const intents: GatewayIntentBits[] = [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
+  ];
+  const client = new DiscordClient({ intents });
 
-  client.commands = new Collection();
+  // The current file extension of the file(for tsc build)
+  const fileExtension = path.extname(__filename);
+
   const foldersPath = path.join(__dirname, 'commands');
   const commandFolders = fs.readdirSync(foldersPath);
-
   for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
     const commandFiles = fs
       .readdirSync(commandsPath)
-      .filter((file) => file.endsWith('.js'));
+      .filter((file) => file.endsWith(fileExtension));
 
     try {
       for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
-        const command = await import(filePath);
-        const { data, execute } = command.default;
+        const commandFile = await import(filePath);
+        const command: Command = new commandFile.default();
         // Set a new item in the Collection with the key as the command name and the value as the exported module
-        if (data && execute) {
-          client.commands.set(data.name, command.default);
-        } else {
-          console.warn(
-            `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-          );
-        }
+        client.commands.set(command.data.name, command);
       }
     } catch (err) {
       console.error('Failed to load the file with a command: ', err);
@@ -52,17 +50,16 @@ const main = async () => {
   const eventsPath = path.join(__dirname, 'events');
   const eventFiles = fs
     .readdirSync(eventsPath)
-    .filter((file) => file.endsWith('.js'));
-
+    .filter((file) => file.endsWith(fileExtension));
   try {
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);
-      const event = await import(filePath);
-      const { name, once, execute } = event.default;
-      if (once) {
-        client.once(name, (...args) => execute(...args));
+      const eventFile = await import(filePath);
+      const event: IClientEvent = new eventFile.default(client);
+      if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
       } else {
-        client.on(name, (...args) => execute(...args));
+        client.on(event.name, (...args) => event.execute(...args));
       }
     }
   } catch (err) {

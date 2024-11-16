@@ -1,12 +1,13 @@
-import { Events } from 'discord.js';
+import { Events, Interaction } from 'discord.js';
+import { ClientEvent } from '../ClientEvent';
 
-const event = {
-  name: Events.InteractionCreate,
-  once: false,
-  execute: async (interaction) => {
+export default class InteractionCreateEvent extends ClientEvent<Events.InteractionCreate> {
+  public readonly name = Events.InteractionCreate;
+  public readonly once = false;
+  public async execute(interaction: Interaction<'cached'>): Promise<void> {
     if (!interaction.isChatInputCommand()) return;
 
-    const command = interaction.client.commands.get(interaction.commandName);
+    const command = this.client.commands.get(interaction.commandName);
 
     if (!command) {
       console.error(
@@ -31,7 +32,5 @@ const event = {
         });
       }
     }
-  },
-};
-
-export default event;
+  }
+}

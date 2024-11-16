@@ -1,6 +1,6 @@
 import { createAudioPlayer, AudioPlayerStatus } from '@discordjs/voice';
-import { getNextVideo } from './video-queue.js';
-import { createAudioResourceFromYouTubeURL } from './utils.js';
+import { getNextVideo } from './video-queue';
+import { createAudioResourceFromYouTubeURL } from './utils';
 
 const player = createAudioPlayer();
 

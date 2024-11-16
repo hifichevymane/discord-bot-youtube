@@ -6,11 +6,13 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/main.js",
-    "deploy-commands": "node src/deploy-commands.js",
-    "start": "env NODE_ENV=development pm2 start src/main.js --name=discord-bot --watch",
+    "dev": "npx tsx watch src/main.ts",
+    "deploy:commands": "npx tsx src/deploy-commands.ts",
+    "deploy:app": "pm2 start dist/main.js --name=discord-bot",
     "stop": "pm2 stop discord-bot",
-    "logs": "pm2 logs discord-bot --lines=100"
+    "logs:show": "pm2 logs discord-bot --lines=100",
+    "logs:clear": "pm2 flush discord-bot",
+    "build": "tsc && tsc-alias"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,8 @@
     "libsodium-wrappers": "^0.7.15"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "tsc-alias": "^1.8.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   }
 }
