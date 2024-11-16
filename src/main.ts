@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { GatewayIntentBits } from 'discord.js';
 import DiscordClient from './DiscordClient';
 import Command from './Command';
+import { IClientEvent } from './ClientEvent';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,12 +53,12 @@ const main = async () => {
   try {
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);
-      const event = await import(filePath);
-      const { name, once, execute } = event.default;
-      if (once) {
-        client.once(name, (...args) => execute(...args));
+      const eventFile = await import(filePath);
+      const event: IClientEvent = new eventFile.default(client);
+      if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
       } else {
-        client.on(name, (...args) => execute(...args));
+        client.on(event.name, (...args) => event.execute(...args));
       }
     }
   } catch (err) {

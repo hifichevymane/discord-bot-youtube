@@ -1,11 +1,10 @@
-import { Events } from 'discord.js';
+import { Client, Events } from 'discord.js';
+import { ClientEvent } from '../ClientEvent';
 
-const event = {
-  name: Events.ClientReady,
-  once: true,
-  execute: (client) => {
+export default class ClientReadyEvent extends ClientEvent<Events.ClientReady> {
+  public readonly name = Events.ClientReady;
+  public readonly once = true;
+  public execute(client: Client<true>): void | Promise<void> {
     console.log(`The client is ready! Logged in as ${client.user.tag}`);
-  },
-};
-
-export default event;
+  }
+}

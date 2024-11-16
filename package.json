@@ -11,7 +11,7 @@
     "start": "env NODE_ENV=development pm2 start src/main.js --name=discord-bot --watch",
     "stop": "pm2 stop discord-bot",
     "logs": "pm2 logs discord-bot --lines=100",
-    "build": "npx tsc"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
