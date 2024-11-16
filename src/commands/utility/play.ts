@@ -53,6 +53,7 @@ export default class PlayCommand extends Command {
         connection = joinVoiceChannel({
           channelId: voiceChannel.id,
           guildId: guildId,
+          // @ts-ignore: This is a bug of Discord.js library
           adapterCreator: voiceChannel.guild.voiceAdapterCreator,
         });
       }

@@ -23,13 +23,16 @@ const main = async () => {
   ];
   const client = new DiscordClient({ intents });
 
+  // The current file extension of the file(for tsc build)
+  const fileExtension = path.extname(__filename);
+
   const foldersPath = path.join(__dirname, 'commands');
   const commandFolders = fs.readdirSync(foldersPath);
   for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
     const commandFiles = fs
       .readdirSync(commandsPath)
-      .filter((file) => file.endsWith('.ts'));
+      .filter((file) => file.endsWith(fileExtension));
 
     try {
       for (const file of commandFiles) {
@@ -47,7 +50,7 @@ const main = async () => {
   const eventsPath = path.join(__dirname, 'events');
   const eventFiles = fs
     .readdirSync(eventsPath)
-    .filter((file) => file.endsWith('.ts'));
+    .filter((file) => file.endsWith(fileExtension));
   try {
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);

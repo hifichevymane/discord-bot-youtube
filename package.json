@@ -8,10 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx tsx watch src/main.ts",
     "deploy-commands": "npx tsx src/deploy-commands.ts",
-    "start": "env NODE_ENV=development pm2 start src/main.js --name=discord-bot --watch",
+    "start": "pm2 start dist/main.js --name=discord-bot",
     "stop": "pm2 stop discord-bot",
     "logs": "pm2 logs discord-bot --lines=100",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "libsodium-wrappers": "^0.7.15"
   },
   "devDependencies": {
+    "tsc-alias": "^1.8.10",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }

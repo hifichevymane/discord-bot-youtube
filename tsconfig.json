@@ -1,15 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ES2020" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    "module": "ES2020" /* Specify what module code is generated. */,
-    "rootDir": "./" /* Specify the root folder within your source files. */,
-    "moduleResolution": "bundler",
-    "sourceMap": true /* Create source map files for emitted JavaScript files. */,
-    "outDir": "./dist" /* Specify an output folder for all emitted files. */,
-    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
-    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-    /* Type Checking */
-    "strict": true /* Enable all strict type-checking options. */
+    "target": "ES2020" /* Target modern JavaScript */,
+    "module": "ESNext" /* Use ES modules for output */,
+    "moduleResolution": "bundler" /* Resolve modules in a Node.js environment */,
+    "rootDir": "./src" /* Specify root directory of TypeScript files */,
+    "outDir": "./dist" /* Output directory for compiled files */,
+    "strict": true /* Enable strict type checking */,
+    "esModuleInterop": true /* Interoperate with CommonJS modules */,
+    "forceConsistentCasingInFileNames": true /* Ensure consistent import paths */,
+    "allowSyntheticDefaultImports": true /* Allow default imports from modules without default exports */,
+    "resolveJsonModule": true /* Include JSON module resolution */,
+    "sourceMap": true /* Generate source maps for debugging */,
+    "noEmitOnError": true /* Prevent emitting files on compilation error */
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true,
+    "fileExtensions": {
+      "inputGlob": "{js,mjs}",
+      "outputCheck": ["js", "json", "mjs"]
+    }
+  }
 }
