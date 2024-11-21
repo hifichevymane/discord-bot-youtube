@@ -1,5 +1,5 @@
 import { ClientEvents } from "discord.js"
-import DiscordClient from "./DiscordClient";
+import { DiscordClient } from "./client";
 
 abstract class ClientEvent<T extends keyof ClientEvents> {
   public abstract readonly name: T;

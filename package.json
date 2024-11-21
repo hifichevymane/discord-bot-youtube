@@ -13,8 +13,8 @@
     "logs:show": "pm2 logs discord-bot --lines=100",
     "logs:clear": "pm2 flush discord-bot",
     "build": "tsc && tsc-alias",
-    "lint": "npx eslint .",
-    "lint:fix": "npx eslint . --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
