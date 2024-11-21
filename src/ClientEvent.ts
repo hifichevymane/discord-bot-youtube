@@ -15,10 +15,13 @@ abstract class ClientEvent<T extends keyof ClientEvents> {
   }
 }
 
+// The interface is used only to be used to define imported client event class
 interface IClientEvent {
   name: string,
   once: boolean,
-  execute: (...args: any) => void | Promise<void>
+  // It doesn't matter the type of args
+  // eslint-disable-next-line
+  execute: (...args: any[]) => void | Promise<void>
 }
 
 export { ClientEvent, IClientEvent };
