@@ -12,7 +12,8 @@
     "stop": "pm2 stop discord-bot",
     "logs:show": "pm2 logs discord-bot --lines=100",
     "logs:clear": "pm2 flush discord-bot",
-    "build": "tsc && tsc-alias"
+    "build": "tsc && tsc-alias",
+    "lint": "npx eslint ."
   },
   "keywords": [],
   "author": "",
@@ -25,8 +26,11 @@
     "libsodium-wrappers": "^0.7.15"
   },
   "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.15.0"
   }
 }
