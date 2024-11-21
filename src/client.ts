@@ -12,7 +12,6 @@ const intents: GatewayIntentBits[] = [
   GatewayIntentBits.GuildMessages,
   GatewayIntentBits.GuildMembers,
 ];
-
 const client = new DiscordClient({ intents });
 
 export { DiscordClient, client }
