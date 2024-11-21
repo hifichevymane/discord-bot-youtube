@@ -3,9 +3,8 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { GatewayIntentBits } from 'discord.js';
 
-import DiscordClient from './DiscordClient';
+import { client } from './client';
 import Command from './Command';
 import { IClientEvent } from './ClientEvent';
 
@@ -14,15 +13,6 @@ const __dirname = path.dirname(__filename);
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || 'token';
 
 const main = async () => {
-  const intents: GatewayIntentBits[] = [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildVoiceStates,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMembers,
-  ];
-  const client = new DiscordClient({ intents });
-
   // The current file extension of the file(for tsc build)
   const fileExtension = path.extname(__filename);
 
