@@ -61,3 +61,17 @@ Clear logs:
 ```sh
 npm run logs:clear
 ```
+
+## Lint
+
+Run linter without fixing errors:
+
+```sh
+npm run lint
+```
+
+Run linter and fix the errors:
+
+```sh
+npm run lint:fix
+```
