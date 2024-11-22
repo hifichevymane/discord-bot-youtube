@@ -2,7 +2,7 @@ import { Client, Collection, GatewayIntentBits } from "discord.js";
 import Command from "./Command";
 
 class DiscordClient extends Client {
-  commands = new Collection<string, Command>();
+  public commands = new Collection<string, Command>();
 };
 
 const intents: GatewayIntentBits[] = [
