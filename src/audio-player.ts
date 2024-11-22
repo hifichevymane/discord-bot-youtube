@@ -57,7 +57,6 @@ player.on(AudioPlayerStatus.Idle, async () => {
 
   const channel = client.channels.cache.get(currentTextChannelId) as TextChannel | undefined;
   if (!channel) return;
-
   await channel.send(`Now is playing: ${url}`);
 });
 
