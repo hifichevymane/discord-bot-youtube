@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { client } from './client';
+import { getDiscordClient } from './client';
 import Command from './Command';
 import { IClientEvent } from './ClientEvent';
 
@@ -15,6 +15,8 @@ const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || 'token';
 const main = async () => {
   // The current file extension of the file(for tsc build)
   const fileExtension = path.extname(__filename);
+
+  const client = getDiscordClient();
 
   const foldersPath = path.join(__dirname, 'commands');
   const commandFolders = fs.readdirSync(foldersPath);

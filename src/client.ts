@@ -14,4 +14,8 @@ const intents: GatewayIntentBits[] = [
 ];
 const client = new DiscordClient({ intents });
 
-export { DiscordClient, client }
+const getDiscordClient = (): DiscordClient => {
+  return client;
+}
+
+export { DiscordClient, getDiscordClient };
