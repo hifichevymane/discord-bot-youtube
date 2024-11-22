@@ -43,4 +43,8 @@ player.on(AudioPlayerStatus.Idle, async () => {
   await channel.send(`Now is playing: ${url}`);
 });
 
-export default player;
+const getAudioPlayer = (): CustomAudioPlayer => {
+  return player;
+};
+
+export default getAudioPlayer;

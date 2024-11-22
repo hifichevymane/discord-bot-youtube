@@ -6,7 +6,7 @@ import {
 } from '@discordjs/voice';
 import ytdl from '@distube/ytdl-core';
 
-import player from '../../audio-player';
+import getAudioPlayer from '../../audio-player';
 import { addVideoToQueue } from '../../video-queue';
 import { createAudioResourceFromYouTubeURL } from '../../utils';
 import Command from '../../Command';
@@ -37,6 +37,7 @@ export default class PlayCommand extends Command {
     }
 
     try {
+      const player = getAudioPlayer();
       player.setCurrentTextChannelId(interaction.channelId);
       if (player.state.status === AudioPlayerStatus.Playing) {
         addVideoToQueue(url);
