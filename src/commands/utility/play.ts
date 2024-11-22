@@ -7,7 +7,6 @@ import {
 import ytdl from '@distube/ytdl-core';
 
 import getAudioPlayer from '../../audio-player';
-import { addVideoToQueue } from '../../video-queue';
 import { createAudioResourceFromYouTubeURL } from '../../utils';
 import Command from '../../Command';
 
@@ -40,7 +39,7 @@ export default class PlayCommand extends Command {
       const player = getAudioPlayer();
       player.setCurrentTextChannelId(interaction.channelId);
       if (player.state.status === AudioPlayerStatus.Playing) {
-        addVideoToQueue(url);
+        player.addVideoToQueue(url);
         await interaction.reply(`The video ${url} was added to a queue`);
         return;
       }

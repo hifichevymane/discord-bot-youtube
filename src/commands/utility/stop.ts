@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
-import { emptyVideoQueue } from '../../video-queue';
 import Command from '../../Command';
+import getAudioPlayer from '../../audio-player';
 
 export default class StopCommand extends Command {
   public readonly data = new SlashCommandBuilder()
@@ -22,7 +22,8 @@ export default class StopCommand extends Command {
     }
 
     connection.destroy();
-    emptyVideoQueue();
+    const player = getAudioPlayer();
+    player.emptyVideoQueue();
     await interaction.reply('The bot has been stopped');
   }
 }

@@ -1,13 +1,13 @@
 import { TextChannel } from 'discord.js';
 import { AudioPlayerStatus, AudioPlayer } from '@discordjs/voice';
 
-import { getNextVideo } from './video-queue';
 import { createAudioResourceFromYouTubeURL } from './utils';
 import { client } from './client';
 
 class CustomAudioPlayer extends AudioPlayer {
   private currentTextChannelId: string | undefined;
   private currentVideoURL: string | undefined;
+  private videoQueue: string[] = [];
 
   public getCurrentTextChannelId(): string | undefined {
     return this.currentTextChannelId;
@@ -24,11 +24,29 @@ class CustomAudioPlayer extends AudioPlayer {
   public setCurrentVideoURL(url: string): void {
     this.currentVideoURL = url;
   }
+
+  public getVideoQueue(): string[] {
+    return this.videoQueue;
+  }
+
+  public addVideoToQueue(url: string): void {
+    this.videoQueue.push(url);
+  }
+
+  public getNextVideo(): string | undefined {
+    const videoUrl = this.videoQueue.shift();
+    this.currentVideoURL = videoUrl;
+    return videoUrl;
+  }
+
+  public emptyVideoQueue(): void {
+    this.videoQueue = [];
+  }
 };
 
 const player = new CustomAudioPlayer();
 player.on(AudioPlayerStatus.Idle, async () => {
-  const url = getNextVideo();
+  const url = player.getNextVideo();
   if (!url) return;
 
   const resource = createAudioResourceFromYouTubeURL(url);
