@@ -19,7 +19,7 @@ const PLAYLIST_VIDEO_LIMIT = 20;
 export default class PlayCommand extends Command {
   public readonly data = new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Play Youtube video by URL')
+    .setDescription('Play Youtube video or playlist by URL')
     .addStringOption((option) =>
       option.setName('url').setDescription('youtube url link').setRequired(true)
     );
