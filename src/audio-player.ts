@@ -5,11 +5,11 @@ import { createAudioResourceFromYouTubeURL } from './utils';
 import { client } from './client';
 
 class CustomAudioPlayer extends AudioPlayer {
-  private currentTextChannelId: string | undefined;
-  private currentVideoURL: string | undefined;
+  private currentTextChannelId: string | null = null;
+  private currentVideoURL: string | null = null;
   private videoQueue: string[] = [];
 
-  public getCurrentTextChannelId(): string | undefined {
+  public getCurrentTextChannelId(): string | null {
     return this.currentTextChannelId;
   }
 
@@ -17,7 +17,7 @@ class CustomAudioPlayer extends AudioPlayer {
     this.currentTextChannelId = channelId;
   }
 
-  public getCurrentVideoURL(): string | undefined {
+  public getCurrentVideoURL(): string | null {
     return this.currentVideoURL;
   }
 
@@ -33,14 +33,15 @@ class CustomAudioPlayer extends AudioPlayer {
     this.videoQueue.push(url);
   }
 
-  public getNextVideo(): string | undefined {
-    const videoUrl = this.videoQueue.shift();
+  public getNextVideo(): string | null {
+    const videoUrl = this.videoQueue.shift() || null;
     this.currentVideoURL = videoUrl;
     return videoUrl;
   }
 
   public emptyVideoQueue(): void {
     this.videoQueue = [];
+    this.currentVideoURL = null;
   }
 };
 
