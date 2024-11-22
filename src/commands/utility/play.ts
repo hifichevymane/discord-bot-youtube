@@ -14,6 +14,8 @@ import Command from '../../Command';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { VoiceConnection } from '@discordjs/voice';
 
+const PLAYLIST_VIDEO_LIMIT = 20;
+
 export default class PlayCommand extends Command {
   public readonly data = new SlashCommandBuilder()
     .setName('play')
@@ -47,6 +49,9 @@ export default class PlayCommand extends Command {
         playlist = await ytpl(url);
         if (playlist.total_items === 0) {
           await interaction.reply('The playlist is empty!');
+          return;
+        } else if (playlist.total_items > PLAYLIST_VIDEO_LIMIT) {
+          await interaction.reply(`The video limit of the playlist is ${PLAYLIST_VIDEO_LIMIT}`);
           return;
         }
       }
