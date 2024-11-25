@@ -5,6 +5,7 @@ import {
   AudioPlayerStatus,
 } from '@discordjs/voice';
 import ytdl from '@distube/ytdl-core';
+import ytpl from '@distube/ytpl';
 
 import getAudioPlayer from '../../audio-player';
 import { createAudioResourceFromYouTubeURL } from '../../utils';
@@ -13,10 +14,12 @@ import Command from '../../Command';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { VoiceConnection } from '@discordjs/voice';
 
+const PLAYLIST_VIDEO_LIMIT = 20;
+
 export default class PlayCommand extends Command {
   public readonly data = new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Play Youtube video by URL')
+    .setDescription('Play Youtube video or playlist by URL')
     .addStringOption((option) =>
       option.setName('url').setDescription('youtube url link').setRequired(true)
     );
@@ -30,7 +33,9 @@ export default class PlayCommand extends Command {
       return;
     }
 
-    if (!ytdl.validateURL(url)) {
+    const isVideo = ytdl.validateURL(url);
+    const isPlaylist = ytpl.validateID(url);
+    if (!isVideo && !isPlaylist) {
       await interaction.reply('Invalid url');
       return;
     }
@@ -38,10 +43,30 @@ export default class PlayCommand extends Command {
     try {
       const player = getAudioPlayer();
       player.setCurrentTextChannelId(interaction.channelId);
+
+      let playlist;
+      if (isPlaylist) {
+        playlist = await ytpl(url);
+        if (playlist.total_items === 0) {
+          await interaction.reply('The playlist is empty!');
+          return;
+        } else if (playlist.total_items > PLAYLIST_VIDEO_LIMIT) {
+          await interaction.reply(`The video limit of the playlist is ${PLAYLIST_VIDEO_LIMIT}`);
+          return;
+        }
+      }
       if (player.state.status === AudioPlayerStatus.Playing) {
-        player.addVideoToQueue(url);
-        await interaction.reply(`The video ${url} was added to a queue`);
-        return;
+        if (isVideo) {
+          player.addVideoToQueue(url);
+          await interaction.reply(`The video ${url} was added to a queue`);
+          return;
+        } else if (isPlaylist && playlist) {
+          playlist.items.forEach(({ url }) => {
+            player.addVideoToQueue(url);
+          });
+          await interaction.reply(`The playlist ${url} was added to a queue`);
+          return;
+        }
       }
 
       const guildId = voiceChannel.guild.id;
@@ -59,12 +84,32 @@ export default class PlayCommand extends Command {
         });
       }
 
-      const resource = createAudioResourceFromYouTubeURL(url);
-      player.play(resource);
-      player.setCurrentVideoURL(url);
-      connection.subscribe(player);
+      if (isVideo) {
+        const resource = createAudioResourceFromYouTubeURL(url);
+        player.play(resource);
+        player.setCurrentVideoURL(url);
+        connection.subscribe(player);
 
-      await interaction.reply(`Now playing ${url}`);
+        await interaction.reply(`Now playing ${url}`);
+      } else if (isPlaylist && playlist) {
+        const firstVideoInPlaylist = playlist.items[0]
+        const playlistFirstVideoURL = firstVideoInPlaylist.url;
+        if (!playlistFirstVideoURL) {
+          await interaction.reply('The video was not found');
+          return;
+        }
+
+        const resource = createAudioResourceFromYouTubeURL(playlistFirstVideoURL);
+        player.play(resource);
+        player.setCurrentVideoURL(playlistFirstVideoURL);
+        connection.subscribe(player);
+
+        await interaction.reply(`Now playing ${playlistFirstVideoURL}`);
+        playlist.items.forEach(({ url }, idx) => {
+          if (idx === 0) return;
+          player.addVideoToQueue(url);
+        });
+      }
     } catch (err) {
       console.error('Failed to stream youtube video: ', err);
       await interaction.reply('Failed to stream youtube video');
