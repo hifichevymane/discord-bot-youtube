@@ -60,8 +60,8 @@ export default class PlayCommand extends Command {
           player.addVideoToQueue(url);
           await interaction.reply(`The video ${url} was added to a queue`);
           return;
-        } else if (isPlaylist) {
-          playlist?.items.forEach(({ url }) => {
+        } else if (isPlaylist && playlist) {
+          playlist.items.forEach(({ url }) => {
             player.addVideoToQueue(url);
           });
           await interaction.reply(`The playlist ${url} was added to a queue`);
@@ -91,9 +91,9 @@ export default class PlayCommand extends Command {
         connection.subscribe(player);
 
         await interaction.reply(`Now playing ${url}`);
-      } else if (isPlaylist) {
-        const firstVideoInPlaylist = playlist?.items[0]
-        const playlistFirstVideoURL = firstVideoInPlaylist?.url;
+      } else if (isPlaylist && playlist) {
+        const firstVideoInPlaylist = playlist.items[0]
+        const playlistFirstVideoURL = firstVideoInPlaylist.url;
         if (!playlistFirstVideoURL) {
           await interaction.reply('The video was not found');
           return;
@@ -105,7 +105,7 @@ export default class PlayCommand extends Command {
         connection.subscribe(player);
 
         await interaction.reply(`Now playing ${playlistFirstVideoURL}`);
-        playlist?.items.forEach(({ url }, idx) => {
+        playlist.items.forEach(({ url }, idx) => {
           if (idx === 0) return;
           player.addVideoToQueue(url);
         });
