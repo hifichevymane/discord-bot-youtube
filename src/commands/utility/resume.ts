@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
-import player from '../../audio-player';
 import Command from '../../Command';
+import getAudioPlayer from '../../audio-player';
 
 export default class ResumeCommand extends Command {
   public readonly data = new SlashCommandBuilder()
@@ -21,6 +21,7 @@ export default class ResumeCommand extends Command {
       return;
     }
 
+    const player = getAudioPlayer();
     player.unpause();
     await interaction.reply('The current track was resumed!');
   }

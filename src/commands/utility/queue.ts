@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { getVideoQueue } from '../../video-queue';
 import Command from '../../Command';
+import getAudioPlayer from '../../audio-player';
 
 export default class QueueCommand extends Command {
   public readonly data = new SlashCommandBuilder()
@@ -8,7 +8,8 @@ export default class QueueCommand extends Command {
     .setDescription('Shows the list of queued videos');
 
   public async execute(interaction: ChatInputCommandInteraction<'cached'>): Promise<void> {
-    const trackQueue = getVideoQueue();
+    const player = getAudioPlayer();
+    const trackQueue = player.getVideoQueue();
     if (!trackQueue.length) {
       await interaction.reply('The queue is empty!');
       return;
