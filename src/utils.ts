@@ -11,8 +11,8 @@ export const createAudioResourceFromYouTubeURL = (url: string): AudioResource<nu
   });
 
   stream.on('error', (err) => {
-    stream.destroy();
     console.error('Streaming failed:', err);
+    stream.destroy(err);
   });
 
   return createAudioResource(stream);

@@ -42,7 +42,7 @@ export default class PlayCommand extends Command {
 
     try {
       const player = getAudioPlayer();
-      player.setCurrentTextChannelId(interaction.channelId);
+      player.setCurrentTextChannel(interaction.channel);
 
       let playlist;
       if (isPlaylist) {

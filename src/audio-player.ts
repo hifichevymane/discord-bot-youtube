@@ -1,21 +1,12 @@
-import { TextChannel } from 'discord.js';
 import { AudioPlayerStatus, AudioPlayer } from '@discordjs/voice';
+import type { GuildTextBasedChannel } from 'discord.js';
 
 import { createAudioResourceFromYouTubeURL } from './utils';
-import { getDiscordClient } from './client';
 
 class CustomAudioPlayer extends AudioPlayer {
-  private currentTextChannelId: string | null = null;
   private currentVideoURL: string | null = null;
   private videoQueue: string[] = [];
-
-  public getCurrentTextChannelId(): string | null {
-    return this.currentTextChannelId;
-  }
-
-  public setCurrentTextChannelId(channelId: string): void {
-    this.currentTextChannelId = channelId;
-  }
+  private currentTextChannel: GuildTextBasedChannel | null = null;
 
   public getCurrentVideoURL(): string | null {
     return this.currentVideoURL;
@@ -43,9 +34,26 @@ class CustomAudioPlayer extends AudioPlayer {
     this.videoQueue = [];
     this.currentVideoURL = null;
   }
+
+  public getCurrentTextChannel(): GuildTextBasedChannel | null {
+    return this.currentTextChannel;
+  }
+
+  public setCurrentTextChannel(channel: GuildTextBasedChannel | null): void {
+    this.currentTextChannel = channel;
+  }
 };
 
 const player = new CustomAudioPlayer();
+
+player.on('error', async (err) => {
+  console.error(`The error happened with AudioPlayer: ${err.message}`);
+
+  const channel = player.getCurrentTextChannel();
+  if (!channel) return;
+  await channel.send(`Ooops... The error happened: ${err.message}`);
+});
+
 player.on(AudioPlayerStatus.Idle, async () => {
   const url = player.getNextVideo();
   if (!url) return;
@@ -53,11 +61,7 @@ player.on(AudioPlayerStatus.Idle, async () => {
   const resource = createAudioResourceFromYouTubeURL(url);
   player.play(resource);
 
-  const currentTextChannelId = player.getCurrentTextChannelId();
-  if (!currentTextChannelId) return;
-
-  const client = getDiscordClient();
-  const channel = client.channels.cache.get(currentTextChannelId) as TextChannel | undefined;
+  const channel = player.getCurrentTextChannel();
   if (!channel) return;
   await channel.send(`Now is playing: ${url}`);
 });
